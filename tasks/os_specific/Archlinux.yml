@@ -1,1 +1,23 @@
 ---
+- name: Installing additionnal build tools
+  become: true
+  pacman:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - cmake 
+    - libjpeg-turbo 
+    - libx11 
+    - libxfont2 
+    - libxfixes 
+    - libxslt 
+    - libxrandr 
+    - nasm 
+    - openssl 
+    - pam 
+    - perl-xml-libxml 
+    - xmlto 
+    - xorg-fonts 
+    - xorg-server 
+    - xorg-xinit 
+  when: xrdp_install_from_source|bool

@@ -48,7 +48,7 @@ Install xrdp with the default settings
 
 ## License
 
-BSD-3-Clause-Clear
+GPL-3.0-or-later
 
 ## Author Information
 

@@ -1,0 +1,6 @@
+.molecule/
+.idea/
+*.pyc
+*.retry
+*.log
+__pycache__/

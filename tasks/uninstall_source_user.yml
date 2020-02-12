@@ -1,0 +1,13 @@
+---
+- name: Uninstalling xrdp (user)
+  become: true
+  become_user: "{{ item.key }}"
+  make:
+    target: uninstall
+    chdir: "{{ item.value['home'] }}/.local/src/xrdp-{{ xrdp_git_version }}/"
+
+- name: Removing source folder
+  become: true
+  file:
+    path: "{{ item.value['home'] }}/.local/src/xrdp-{{ xrdp_git_version }}/"
+    state: absent

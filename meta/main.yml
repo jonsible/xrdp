@@ -1,0 +1,30 @@
+---
+galaxy_info:
+  role_name: xrdp
+  author: Jonathan Scherrer
+  description: |
+    Role to install xrdp
+
+  license: MIT
+
+  min_ansible_version: 2.3
+
+  platforms:
+    - name: CentOS
+      versions:
+        - 7
+    - name: Debian
+      versions:
+        - stretch
+    - name: Fedora
+      versions:
+        - 29
+    - name: Ubuntu
+      versions:
+        - bionic
+
+  galaxy_tags: []
+
+  dependencies:
+    - role: jonsible.ulist
+    - role: jonsible.filter_plugins

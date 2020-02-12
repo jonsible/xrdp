@@ -1,0 +1,32 @@
+---
+- name: Creating skel config
+  become: true
+  copy:
+    src: files/.tmux.conf
+    dest: /etc/skel/.tmux.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: xrdp_skel_config|bool
+
+- name: Creating user config directory
+  become: true
+  become_user: "{{ item.key }}"
+  file:
+    path: "{{ item.value['home'] }}/.config/tmux/"
+    mode: 0700
+    owner: "{{ item.key }}"
+    state: directory
+  loop: "{{ lookup('dict', xrdp_user_list, wantlist=true) }}"
+
+
+- name: Installing user config
+  become: true
+  copy:
+    src: files/.tmux.conf
+    dest: "{{ item.value['home'] }}/.tmux.conf"
+    owner: "{{ item.key }}"
+    mode: 0600
+    attr: +i
+  loop: "{{ lookup('dict', xrdp_user_list, wantlist=true) }}"
+  when: xrdp_user_config|bool

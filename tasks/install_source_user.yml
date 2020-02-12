@@ -1,0 +1,42 @@
+---
+- name: Creating xrdp versioned directory
+  become: true
+  become_user: "{{ item.key }}"
+  file:
+    path: "{{ item.value['home'] }}/.local/src/xrdp-{{ xrdp_git_version }}/"
+    state: directory
+    mode: 0755
+
+- name: Downloading the latest version of xrdp
+  become: true
+  become_user: "{{ item.key }}"
+  unarchive:
+    src: "{{ xrdp_source_url }}"
+    dest: "{{ item.value['home'] }}/.local/src/xrdp-{{ xrdp_git_version }}/"
+    extra_opts:
+      - --strip-components=1
+    remote_src: true
+
+- name: Configuring xrdp
+  become: true
+  become_user: "{{ item.key }}"
+  shell: |
+    ./configure --prefix="{{ item.value['home'] }}/.local/"
+  changed_when: false
+  args:
+    chdir: "{{ item.value['home'] }}/.local/src/xrdp-{{ xrdp_git_version }}/"
+
+- name: Making xrdp
+  become: true
+  make:
+    chdir: "{{ item.value['home'] }}/.local/src/xrdp-{{ xrdp_git_version }}/"
+
+- name: Installing xrdp (user)
+  become: true
+  become_user: "{{ item.key }}"
+  changed_when: false
+  make:
+    chdir: "{{ item.value['home'] }}/.local/src/xrdp-{{ xrdp_git_version }}/"
+    target: install
+    params:
+      PREFIX: "{{ item.value['home'] }}/.local/"

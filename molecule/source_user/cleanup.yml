@@ -1,0 +1,18 @@
+# yamllint disable rule:line-length
+---
+- name: Cleanup
+  hosts: all
+  gather_facts: false
+  pre_tasks:
+    - name: Getting container info
+      docker_container_info:
+        name: "{{ inventory_hostname }}"
+        docker_host: "{{ lookup('env', 'DOCKER_HOST') | default('unix://var/run/docker.sock') }}"
+      register: container
+      delegate_to: localhost
+  tasks:
+    - name: Removing chattr
+      become: true
+      shell: for file in $(find -L /home); do chattr -i $file; done
+      failed_when: false
+      when: container.exists

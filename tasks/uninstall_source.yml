@@ -1,0 +1,19 @@
+---
+- name: Uninstalling xrdp
+  become: true
+  make:
+    target: uninstall
+    chdir: "{{ xrdp_source_path }}/xrdp-{{ xrdp_local_version }}/"
+  when: not xrdp_user_install|bool
+
+- name: Removing source folder
+  become: true
+  file:
+    path: "{{ xrdp_source_path }}/xrdp-{{ xrdp_local_version }}/"
+    state: absent
+  when: not xrdp_user_install|bool
+
+- name: Include xrdp user uninstall
+  include_tasks: uninstall_source_user.yml
+  when: xrdp_user_install|bool
+  loop: "{{ lookup('dict', xrdp_user_list, wantlist=true) }}"

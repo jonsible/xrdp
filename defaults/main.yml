@@ -1,0 +1,24 @@
+# yamllint disable rule:line-length
+---
+# Has global alternative
+xrdp_source_path: "{{ global_source_path | default('/opt') }}"
+xrdp_prefix: "{{ global_prefix | default('/usr/local') }}"
+xrdp_user_install: "{{ global_user_install | default(false) }}"
+xrdp_user_config: "{{_global_user_config | default(false) }}"
+xrdp_skel_config: "{{ global_skel_config | default(false) }}"
+xrdp_install_from_source: "{{ global_install_from_source | default(false) }}"
+xrdp_force_install: "{{ global_force_install | default(false) }}"
+xrdp_user_strip: "{{ global_user_strip | default([]) }}"
+xrdp_user_filter: "{{ global_user_filter | default([])}}"
+xrdp_version: "2.9"
+
+# Shouldn't be changed unless necessary
+xrdp_bin_name: "xrdp"
+
+# Shouldn't be changed
+xrdp_user_list: "{{ global_user_list | default({}) }}"
+xrdp_git_version_cmd: git ls-remote --tags https://github.com/tmux/tmux.git | sed 's/.*\///' | egrep -o "[0-9]*(\.[0-9]*)(\.[0-9]*)?$" | sort -V | tail -n1
+xrdp_local_version_cmd: |
+  {{ xrdp_prefix }}/bin/{{ xrdp_bin_name }} -V | egrep -o "[0-9]*(\.[0-9]*)(\.[0-9]*)?([a-z])?"
+
+xrdp_source_url: "https://github.com/tmux/tmux/releases/download/{{ xrdp_git_version }}/xrdp-{{ xrdp_git_version }}.tar.gz"

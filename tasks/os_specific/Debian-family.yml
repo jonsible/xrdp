@@ -1,0 +1,20 @@
+---
+- name: Installing build tools
+  become: true
+  apt:
+    name: "{{ build_tools }}"
+    update_cache: true
+    state: present
+  when: xrdp_install_from_source|bool
+
+- name: Installing additionnal build tools
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - autoconf
+    - libncurses-dev
+    - libevent-dev
+    - pkg-config
+  when: xrdp_install_from_source|bool

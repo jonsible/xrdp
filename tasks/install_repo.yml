@@ -1,0 +1,7 @@
+---
+- name: Installing xrdp
+  become: true
+  package:
+    name: xrdp
+    state: present
+    update_cache: true

@@ -1,0 +1,102 @@
+# yamllint disable rule:line-length
+---
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}-family.yml"
+
+- name: Include Distribution version specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Include tasks
+  include_tasks: "os_specific/{{ ansible_distribution }}.yml"
+
+- name: Include tasks
+  include_tasks: "os_specific/{{ ansible_os_family }}-family.yml"
+
+- include_tasks: install_repo.yml
+  when: not xrdp_install_from_source|bool
+
+- include_tasks: set_user_list.yml
+  when: >
+    xrdp_user_config|bool or
+    xrdp_user_install|bool
+
+############### Prepare source install ###############
+
+- name: Pre-tasks to install from source
+  block:
+    - name: Installing git
+      become: true
+      package:
+        name: git
+        state: present
+
+    - name: Getting latest xrdp version
+      shell: | # noqa 303
+        set -o pipefail
+        {{ xrdp_git_version_cmd }}
+      args:
+        executable: /bin/bash
+      register: xrdp_git
+      changed_when: false
+
+    - name: Checking if xrdp is installed
+      stat:
+        path: "{{ xrdp_prefix }}/bin/{{ xrdp_bin_name }}"
+      register: xrdp_installed
+
+    - name: Getting current xrdp version
+      shell: |
+        set -o pipefail
+        {{ xrdp_local_version_cmd }}
+      args:
+        executable: /bin/bash
+      when: xrdp_installed.stat.exists
+      register: xrdp_local
+      changed_when: false
+
+    - name: Set forced version
+      set_fact:
+        xrdp_git_version: "{{ xrdp_version }}"
+
+    - name: Set latest xrdp version
+      set_fact:
+        xrdp_git_version: "{{ xrdp_git.stdout }}"
+      when: not xrdp_git_version
+
+    - name: Set local xrdp version
+      set_fact:
+        xrdp_local_version: "{{ xrdp_local.stdout }}"
+      when: xrdp_installed.stat.exists
+  when: xrdp_install_from_source|bool
+
+############### Source Install ###############
+
+- name: Install from source
+  block:
+    - name: Removing any xrdp package
+      become: true
+      package:
+        name: xrdp
+        state: absent
+
+    - include_tasks: uninstall_source.yml
+      when:
+        - xrdp_installed.stat.exists
+        - >
+          (xrdp_git_version != xrdp_local_version) or
+          xrdp_force_install|bool
+
+    - include_tasks: install_source.yml
+
+  when:
+    - xrdp_install_from_source|bool
+    - >
+      not xrdp_installed.stat.exists or
+      xrdp_force_install|bool or
+      (xrdp_git_version != xrdp_local_version)
+
+############### Config ###############
+
+- name: Installing config
+  include_tasks: config.yml

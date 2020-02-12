@@ -1,0 +1,26 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    xrdp_install_from_source: true
+    xrdp_user_strip: ['user.*']
+    xrdp_user_filter: ['jsch.*']
+    xrdp_source_path: "/opt"
+    xrdp_skel_config: true
+    xrdp_user_install: true
+    xrdp_user_config: true
+  pre_tasks:
+    - name: Update cache
+      apt:
+        update_cache: true
+      when: ansible_os_family == "Debian"
+  tasks:
+    - name: Creating users
+      become: true
+      user:
+        name: "{{ item }}"
+        shell: /bin/bash
+      loop: ['jscherrer', 'user1', 'user2', 'svc_user', 'svc_user2']
+
+    - include_role:
+        name: xrdp

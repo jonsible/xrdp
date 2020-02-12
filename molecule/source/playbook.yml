@@ -1,0 +1,26 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    xrdp_install_from_source: true
+    xrdp_prefix: "/usr/local"
+    xrdp_source_path: "/test/source"
+    xrdp_skel_config: true
+  pre_tasks:
+    - name: Update cache
+      apt:
+        update_cache: true
+      when: ansible_os_family == "Debian"
+  tasks:
+    - include_role:
+        name: xrdp
+
+    - include_role:
+        name: xrdp
+        apply:
+          tags:
+            - molecule-idempotence-notest
+      vars:
+        xrdp_force_install: true
+      tags:
+        - molecule-idempotence-notest

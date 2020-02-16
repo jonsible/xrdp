@@ -9,6 +9,15 @@
     mode: 0644
   when: xrdp_skel_config|bool
 
+- name: User .local pathmunge
+  become: true
+  copy:
+    content: |
+      #!/bin/sh
+      pathmunge $HOME/.local/bin
+    dest: /etc/profile.d/userpath.sh
+    mode: 0755
+
 - name: Creating user config directory
   become: true
   become_user: "{{ item.key }}"
@@ -18,7 +27,7 @@
     owner: "{{ item.key }}"
     state: directory
   loop: "{{ lookup('dict', xrdp_user_list, wantlist=true) }}"
-
+  when: xrdp_user_config|bool
 
 - name: Installing user config
   become: true

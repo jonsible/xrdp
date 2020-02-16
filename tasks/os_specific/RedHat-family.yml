@@ -17,15 +17,3 @@
     - libevent-devel
     - pkgconfig
   when: xrdp_install_from_source|bool
-
-- name: Installing additionnal dependencies
-  become: true
-  yum:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - ncurses-devel
-    - libevent
-    - libevent-devel
-    - pkgconfig
-  when: xrdp_install_from_source|bool

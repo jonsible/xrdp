@@ -1,0 +1,58 @@
+---
+- name: Getting latest xrdp version
+  shell: | # noqa 303
+    set -o pipefail
+    {{ xrdp_git_version_cmd }}
+  args:
+    executable: /bin/bash
+  register: xrdp_git
+  changed_when: false
+
+- name: Setting prefix (user)
+  set_fact:
+    prefix: "{{ item.value['home'] }}/.local"
+  when: xrdp_user_install|bool
+
+- name: Setting source_path (user)
+  set_fact:
+    source_path: "{{ item.value['home'] }}/.local/src"
+  when: xrdp_user_install|bool
+
+- name: Setting prefix (global)
+  set_fact:
+    prefix: "{{ item.value['home'] }}"
+  when: not xrdp_user_install|bool
+
+- name: Setting source_path (global)
+  set_fact:
+    source_path: "{{ xrdp_source_path }}"
+  when: not xrdp_user_install|bool
+
+- name: Checking if xrdp is installed
+  stat:
+    path: "{{ prefix }}/bin/{{ xrdp_bin_name }}"
+  register: xrdp_installed
+
+- name: Getting current xrdp version
+  shell: |
+    set -o pipefail
+    {{ xrdp_local_version_cmd }}
+  args:
+    executable: /bin/bash
+  when: xrdp_installed.stat.exists
+  register: xrdp_local
+  changed_when: false
+
+- name: Set forced version
+  set_fact:
+    xrdp_git_version: "{{ xrdp_version }}"
+
+- name: Set latest xrdp version
+  set_fact:
+    xrdp_git_version: "{{ xrdp_git.stdout }}"
+  when: not xrdp_git_version
+
+- name: Set local xrdp version
+  set_fact:
+    xrdp_local_version: "{{ xrdp_local.stdout }}"
+  when: xrdp_installed.stat.exists

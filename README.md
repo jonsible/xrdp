@@ -1,7 +1,7 @@
-# joscherrer.xrdp
+# jonsible.xrdp
 
-[![Build Status](https://travis-ci.com/joscherrer/xrdp.svg?branch=master)](https://travis-ci.com/joscherrer/xrdp)
-[![Galaxy](https://img.shields.io/badge/galaxy-joscherrer.xrdp-blue.svg)](https://galaxy.ansible.com/joscherrer/xrdp/)
+[![Build Status](https://travis-ci.com/jonsible/xrdp.svg?branch=master)](https://travis-ci.com/jonsible/xrdp)
+[![Galaxy](https://img.shields.io/badge/galaxy-jonsible.xrdp-blue.svg)](https://galaxy.ansible.com/jonsible/xrdp/)
 
 Role to install xrdp
 
@@ -26,11 +26,10 @@ xrdp_user_install: "{{ global_user_install | default(false) }}"
 xrdp_user_config: "{{_global_user_config | default(false) }}"
 xrdp_skel_config: "{{ global_skel_config | default(false) }}"
 xrdp_install_from_source: "{{ global_install_from_source | default(false) }}"
-xrdp_source_url: "https://github.com/user/xrdp/archive/xrdp-{{ xrdp_git_version }}.tar.gz"
 xrdp_force_install: "{{ global_force_install | default(false) }}"
 xrdp_user_strip: "{{ global_user_strip | default([]) }}"
 xrdp_user_filter: "{{ global_user_filter | default([])}}"
-xrdp_version: ""
+xrdp_version: "2.9"
 ```
 
 ## Dependencies
@@ -43,7 +42,7 @@ Install xrdp with the default settings
 ```yaml
 - hosts: all
   roles:
-     - role: joscherrer.xrdp
+     - role: jonsible.xrdp
 ```
 
 ## License

@@ -14,5 +14,4 @@
     - name: Removing chattr
       become: true
       shell: for file in $(find -L /home); do chattr -i $file; done
-      failed_when: false
       when: container.exists

@@ -12,13 +12,11 @@ xrdp_user_strip: "{{ global_user_strip | default([]) }}"
 xrdp_user_filter: "{{ global_user_filter | default([])}}"
 xrdp_version: "2.9"
 
-# Shouldn't be changed unless necessary
-xrdp_bin_name: "xrdp"
-
 # Shouldn't be changed
+xrdp_bin_name: "xrdp"
 xrdp_user_list: "{{ global_user_list | default({}) }}"
 xrdp_git_version_cmd: git ls-remote --tags https://github.com/tmux/tmux.git | sed 's/.*\///' | egrep -o "[0-9]*(\.[0-9]*)(\.[0-9]*)?$" | sort -V | tail -n1
 xrdp_local_version_cmd: |
-  {{ xrdp_prefix }}/bin/{{ xrdp_bin_name }} -V | egrep -o "[0-9]*(\.[0-9]*)(\.[0-9]*)?([a-z])?"
+  {{ prefix }}/bin/{{ xrdp_bin_name }} -V | egrep -o "[0-9]*(\.[0-9]*)(\.[0-9]*)?([a-z])?"
 
 xrdp_source_url: "https://github.com/tmux/tmux/releases/download/{{ xrdp_git_version }}/xrdp-{{ xrdp_git_version }}.tar.gz"

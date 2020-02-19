@@ -24,7 +24,7 @@ platforms:
       - 0.0.0.0:28000:3389/udp
       - 0.0.0.0:28000:3389/tcp
   - name: debian-stretch
-    image: jonsible/debian:stretch-systemd
+    image: jonsible/debian:buster-systemd
     tty: true
     env:
       container: docker

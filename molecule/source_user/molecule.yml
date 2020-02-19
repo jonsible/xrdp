@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 lint: |
-  yamllint
+  yamllint .
   ansible-lint
   flake8
 platforms:
@@ -16,7 +16,7 @@ platforms:
     env:
       container: docker
   - name: debian-stretch
-    image: jonsible/debian:stretch-build
+    image: jonsible/debian:buster-build
     capabilities:
       - LINUX_IMMUTABLE
     tty: true

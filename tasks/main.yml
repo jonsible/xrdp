@@ -32,7 +32,9 @@
         gid: 1000
         uid: 1000
         shell: /bin/bash
-  when: not xrdp_user_install|bool
+  when:
+    - not xrdp_user_install|bool
+    - xrdp_install_from_source|bool
 
 - name: Install from source
   include_tasks: source.yml

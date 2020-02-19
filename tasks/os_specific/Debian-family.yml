@@ -7,7 +7,7 @@
     state: present
   when: xrdp_install_from_source|bool
 
-- name: Installing additionnal build tools
+- name: Installing additionnal dependencies
   become: true
   apt:
     name: "{{ item }}"

@@ -1,1 +1,66 @@
 ---
+- name: Installing additionnal build tools
+  become: true
+  pacman:
+    name: "{{ item }}"
+    state: present
+  loop:
+      - cmake
+      - libjpeg-turbo
+      - libx11
+      - libxfont2
+      - libxfixes
+      - libxslt
+      - libxrandr
+      - nasm
+      - openssl
+      - pam
+      - perl-xml-libxml
+      - xmlto
+      - xorg-fonts
+      - xorg-server
+      - xorg-xinit
+  when: xrdp_install_from_source|bool
+
+- name: Installing build tools
+  become: true
+  pacman:
+    name: "{{ build_tools }}"
+    update_cache: true
+    state: present
+
+- name: Installing additionnal dependencies
+  become: true
+  pacman:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - ncurses
+    - libevent
+  when: xrdp_install_from_source|bool
+
+- name: Installing git
+  become: true
+  pacman:
+    name: git
+    state: present
+
+- name: Creating aur_builder
+  user:
+    name: aur_builder
+    group: wheel
+
+- name: Giving passwordless access to pacman
+  lineinfile:
+    path: /etc/sudoers.d/11-install-aur_builder
+    line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+    create: true
+    validate: 'visudo -cf %s'
+
+- name: Installing yay
+  become: true
+  become_user: aur_builder
+  aur:
+    name: yay
+    use: makepkg
+    skip_installed: true

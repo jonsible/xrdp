@@ -3,25 +3,57 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  yamllint .
+  ansible-lint
+  flake8
 platforms:
   - name: centos-7
     image: jonsible/centos:7
     tty: true
     env:
       container: docker
+    privileged: true
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    command: "/sbin/init"
+    exposed_ports:
+      - 3389/udp
+      - 3389/tcp
+    published_ports:
+      - 0.0.0.0:28000:3389/udp
+      - 0.0.0.0:28000:3389/tcp
   - name: debian-stretch
-    image: jonsible/debian:stretch
+    image: jonsible/debian:stretch-systemd
     tty: true
     env:
       container: docker
       LC_ALL: en_US.utf8
       DEBIAN_FRONTEND: noninteractive
+    privileged: true
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    command: "/lib/systemd/systemd"
+    exposed_ports:
+      - 3389/udp
+      - 3389/tcp
+    published_ports:
+      - 0.0.0.0:28001:3389/udp
+      - 0.0.0.0:28001:3389/tcp
   - name: archlinux-latest
     image: jonsible/archlinux:latest
     env:
       container: docker
+    privileged: true
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    command: "/usr/lib/systemd/systemd"
+    exposed_ports:
+      - 3389/udp
+      - 3389/tcp
+    published_ports:
+      - 0.0.0.0:28002:3389/udp
+      - 0.0.0.0:28002:3389/tcp
 provisioner:
   name: ansible
   env:
@@ -29,9 +61,5 @@ provisioner:
     ANSIBLE_STRATEGY_PLUGINS: /opt/mitogen-0.2.9/ansible_mitogen/plugins/strategy
     ANSIBLE_STRATEGY: mitogen_linear
     ANSIBLE_PIPELINING: true
-  lint:
-    name: ansible-lint
 verifier:
   name: testinfra
-  lint:
-    name: flake8

@@ -5,3 +5,49 @@
     name: xrdp
     state: present
     update_cache: true
+  when: ansible_os_family != "Archlinux"
+
+- name: Installing xrdp (Arch)
+  become: true
+  become_user: aur_builder
+  aur:
+    name: xrdp
+    use: yay
+    skip_installed: true
+  when: ansible_distribution == "Archlinux"
+
+- name: Start and enable xrdp-sesman (stretch)
+  become: true
+  service:
+    name: xrdp-sesman
+    enabled: true
+    state: started
+  tags:  # https://github.com/neutrinolabs/xrdp/issues/714
+    - molecule-notest
+  when: ansible_distribution_release == 'stretch'
+
+- name: Start and enable xrdp (stretch)
+  become: true
+  service:
+    name: xrdp
+    enabled: true
+    state: started
+  tags:  # https://github.com/neutrinolabs/xrdp/issues/714
+    - molecule-notest
+  when: ansible_distribution_release == 'stretch'
+
+- name: Start and enable xrdp-sesman
+  become: true
+  service:
+    name: xrdp-sesman
+    enabled: true
+    state: started
+  when: ansible_distribution_release != 'stretch'
+
+- name: Start and enable xrdp
+  become: true
+  service:
+    name: xrdp
+    enabled: true
+    state: started
+  when: ansible_distribution_release != 'stretch'

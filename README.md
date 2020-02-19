@@ -7,7 +7,15 @@ Role to install xrdp
 
 ## Requirements
 
-None.
+To install on EL distributions, you need the EPEL repository :
+```
+sudo yum install epel-release
+```
+
+To install on Arch distributions, you need to install the ansible-aur module on your ansible control node :
+```
+git clone https://github.com/kewlfft/ansible-aur.git ~/.ansible/plugins/modules/aur
+```
 
 ## Role Variables
 

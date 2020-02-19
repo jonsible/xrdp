@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Installing EPEL
+      yum:
+        name: epel-release
+        state: present
+      when: ansible_os_family == "RedHat"

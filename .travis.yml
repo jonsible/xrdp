@@ -15,7 +15,8 @@ before_install:
   - sudo apt-get -qq update
 
 install:
-  - sudo apt-get -y install python-pip libssl-dev
+  - sudo apt-get -y install python-pip libssl-dev git
+  - git clone https://github.com/kewlfft/ansible-aur.git ~/.ansible/plugins/modules/aur
   - pip install --upgrade setuptools
   - pip install ansible-lint
   - pip install flake8

@@ -18,3 +18,26 @@
     - libevent-dev
     - pkg-config
   when: xrdp_install_from_source|bool
+
+- name: Installing ufw
+  become: true
+  apt:
+    name: ufw
+    state: present
+
+- name: Allow SSH and RDP
+  ufw:
+    rule: allow
+    port: "{{ item[0] }}"
+    proto: "{{ item[1] }}"
+    direction: in
+  loop:
+    - [ 22, 'tcp' ]
+    - [ 3389, 'tcp']
+    - [ 3389, 'udp']
+
+- name: Enabling ufw
+  become: true
+  ufw:
+    state: enabled
+    default: deny

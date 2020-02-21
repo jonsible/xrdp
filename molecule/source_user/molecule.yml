@@ -24,6 +24,23 @@ platforms:
       container: docker
       LC_ALL: en_US.utf8
       DEBIAN_FRONTEND: noninteractive
+  - name: ubuntu-18.04
+    image: jonsible/ubuntu:18.04-systemd
+    tty: true
+    env:
+      container: docker
+      LC_ALL: en_US.utf8
+      DEBIAN_FRONTEND: noninteractive
+    privileged: true
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    command: "/lib/systemd/systemd"
+    exposed_ports:
+      - 3389/udp
+      - 3389/tcp
+    published_ports:
+      - 0.0.0.0:28001:3389/udp
+      - 0.0.0.0:28001:3389/tcp
   - name: archlinux-latest
     image: jonsible/archlinux:latest-build
     capabilities:

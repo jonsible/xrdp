@@ -16,33 +16,12 @@
     skip_installed: true
   when: ansible_distribution == "Archlinux"
 
-- name: Start and enable xrdp-sesman (stretch)
-  become: true
-  service:
-    name: xrdp-sesman
-    enabled: true
-    state: started
-  tags:  # https://github.com/neutrinolabs/xrdp/issues/714
-    - molecule-notest
-  when: ansible_distribution_release == 'stretch'
-
-- name: Start and enable xrdp (stretch)
-  become: true
-  service:
-    name: xrdp
-    enabled: true
-    state: started
-  tags:  # https://github.com/neutrinolabs/xrdp/issues/714
-    - molecule-notest
-  when: ansible_distribution_release == 'stretch'
-
 - name: Start and enable xrdp-sesman
   become: true
   service:
     name: xrdp-sesman
     enabled: true
     state: started
-  when: ansible_distribution_release != 'stretch'
 
 - name: Start and enable xrdp
   become: true
@@ -50,4 +29,3 @@
     name: xrdp
     enabled: true
     state: started
-  when: ansible_distribution_release != 'stretch'

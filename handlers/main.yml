@@ -1,1 +1,4 @@
 ---
+- name: firewalld_reload
+  become: yes
+  command: firewall-cmd --reload

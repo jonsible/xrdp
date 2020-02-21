@@ -17,3 +17,32 @@
     - libevent-devel
     - pkgconfig
   when: xrdp_install_from_source|bool
+
+- name: Installing firewalld
+  become: true
+  yum:
+    name: firewalld
+    state: present
+
+- name: Start/Enable firewalld
+  become: true
+  service:
+    name: firewalld
+    enabled: true
+    state: started
+
+- name: Allowing 3389/tcp
+  become: yes
+  firewalld:
+    port: 3389/tcp
+    permanent: yes
+    state: enabled
+  notify: firewalld_reload
+
+- name: Allowing 3389/udp
+  become: yes
+  firewalld:
+    port: 3389/udp
+    permanent: yes
+    state: enabled
+  notify: firewalld_reload

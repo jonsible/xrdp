@@ -11,6 +11,8 @@ platforms:
   - name: centos-7
     image: jonsible/centos:7
     tty: true
+    capabilities:
+      - NET_ADMIN
     env:
       container: docker
     privileged: true
@@ -26,6 +28,8 @@ platforms:
   - name: debian-stretch
     image: jonsible/debian:buster-systemd
     tty: true
+    capabilities:
+      - NET_ADMIN
     env:
       container: docker
       LC_ALL: en_US.utf8
@@ -40,8 +44,30 @@ platforms:
     published_ports:
       - 0.0.0.0:28001:3389/udp
       - 0.0.0.0:28001:3389/tcp
+  - name: ubuntu-18.04
+    image: jonsible/ubuntu:18.04-systemd
+    tty: true
+    capabilities:
+      - NET_ADMIN
+    env:
+      container: docker
+      LC_ALL: en_US.utf8
+      DEBIAN_FRONTEND: noninteractive
+    privileged: true
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    command: "/lib/systemd/systemd"
+    exposed_ports:
+      - 3389/udp
+      - 3389/tcp
+    published_ports:
+      - 0.0.0.0:28002:3389/udp
+      - 0.0.0.0:28002:3389/tcp
   - name: archlinux-latest
     image: jonsible/archlinux:latest
+    capabilities:
+      - NET_ADMIN
+    tty: true
     env:
       container: docker
     privileged: true
@@ -52,8 +78,8 @@ platforms:
       - 3389/udp
       - 3389/tcp
     published_ports:
-      - 0.0.0.0:28002:3389/udp
-      - 0.0.0.0:28002:3389/tcp
+      - 0.0.0.0:28003:3389/udp
+      - 0.0.0.0:28003:3389/tcp
 provisioner:
   name: ansible
   env:

@@ -5,11 +5,11 @@ cache:
   pip: true
 
 env:
-  - GCE_CREDENTIALS_FILE=$TRAVIS_BUILD_DIR/testproject-233213-45d56e1b7fc5.json
-  - GCE_SERVICE_ACCOUNT_EMAIL=molecule@refined-bolt-255914.iam.gserviceaccount.com
-  - GCE_PROJECT_ID=refined-bolt-255914
   global:
     - fast_finish: true
+    - GCE_CREDENTIALS_FILE=$TRAVIS_BUILD_DIR/testproject-233213-45d56e1b7fc5.json
+    - GCE_SERVICE_ACCOUNT_EMAIL=molecule@refined-bolt-255914.iam.gserviceaccount.com
+    - GCE_PROJECT_ID=refined-bolt-255914
 
 services:
   - docker

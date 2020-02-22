@@ -17,7 +17,7 @@ services:
 before_install:
   - sudo apt-get -qq update
   - curl https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-281.0.0-linux-x86_64.tar.gz | tar -xz -C /tmp
-  - /tmp/google-cloud-sdk/install.sh
+  - /tmp/google-cloud-sdk/install.sh --quiet
   - openssl aes-256-cbc -K $encrypted_5a0f64e3888d_key -iv $encrypted_5a0f64e3888d_iv -in refined-bolt-255914-bd6db447e6eb.json.enc -out refined-bolt-255914-bd6db447e6eb.json -d
   - gcloud auth activate-service-account --key-file $GCE_CREDENTIALS_FILE
   - gcloud config set project $GCP_GCE_PROJECT_ID

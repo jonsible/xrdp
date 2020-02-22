@@ -5,6 +5,9 @@ cache:
   pip: true
 
 env:
+  - GCE_CREDENTIALS_FILE=$TRAVIS_BUILD_DIR/testproject-233213-45d56e1b7fc5.json
+  - GCE_SERVICE_ACCOUNT_EMAIL=molecule@refined-bolt-255914.iam.gserviceaccount.com
+  - GCE_PROJECT_ID=refined-bolt-255914
   global:
     - fast_finish: true
 
@@ -13,6 +16,11 @@ services:
 
 before_install:
   - sudo apt-get -qq update
+  - curl https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-281.0.0-linux-x86_64.tar.gz | tar -xz -C /tmp
+  - /tmp/google-cloud-sdk/install.sh
+  - openssl aes-256-cbc -K $encrypted_5a0f64e3888d_key -iv $encrypted_5a0f64e3888d_iv -in refined-bolt-255914-bd6db447e6eb.json.enc -out refined-bolt-255914-bd6db447e6eb.json -d
+  - gcloud auth activate-service-account --key-file $GCE_CREDENTIALS_FILE
+  - gcloud config set project $GCP_GCE_PROJECT_ID
 
 install:
   - sudo apt-get -y install python-pip libssl-dev git
@@ -22,14 +30,14 @@ install:
   - pip install flake8
   - pip install testinfra
   - pip install molecule
-  - pip install molecule[docker]
+  - pip install molecule-gce
   - WDIR=$(pwd)
   - cd /opt
   - curl -L https://networkgenomics.com/try/mitogen-0.2.9.tar.gz | tar -xz
   - cd $WDIR
 
 script:
-  - molecule test --all
+  - molecule test -s gce
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

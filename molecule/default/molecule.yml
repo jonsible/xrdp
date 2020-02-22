@@ -66,6 +66,7 @@ platforms:
   - name: archlinux-latest
     image: jonsible/archlinux:latest
     capabilities:
+      - SYS_ADMIN
       - NET_ADMIN
     tty: true
     env:

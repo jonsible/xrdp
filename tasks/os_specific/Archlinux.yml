@@ -73,10 +73,11 @@
 
 - name: Start/Enable firewalld
   become: true
-  service:
+  systemd:
     name: firewalld
     enabled: true
     state: started
+  tags: molecule-notest
 
 - name: Allowing 3389/tcp
   become: yes
@@ -85,6 +86,7 @@
     permanent: yes
     state: enabled
   notify: firewalld_reload
+  tags: molecule-notest
 
 - name: Allowing 3389/udp
   become: yes
@@ -93,3 +95,4 @@
     permanent: yes
     state: enabled
   notify: firewalld_reload
+  tags: molecule-notest

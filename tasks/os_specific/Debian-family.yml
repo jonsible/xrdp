@@ -26,6 +26,7 @@
     state: present
 
 - name: Allow SSH and RDP
+  become: true
   ufw:
     rule: allow
     port: "{{ item[0] }}"

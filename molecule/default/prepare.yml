@@ -4,7 +4,7 @@
   gather_facts: false
   tasks:
     - name: Execute gcloud compute ssh
-      shell: gcloud compute ssh {{ item.name }} --zone={{ item.zone }} --command "exit"
+      command: gcloud compute ssh {{ item.name }} --zone={{ item.zone }} --command "exit"
       changed_when: false
       with_items: "{{ molecule_yml.platforms }}"
 

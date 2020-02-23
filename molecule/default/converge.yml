@@ -3,12 +3,6 @@
   hosts: all
   vars:
     xrdp_skel_config: true
-  pre_tasks:
-    - name: Update cache
-      become: true
-      apt:
-        update_cache: true
-      when: ansible_os_family == "Debian"
   tasks:
     - include_role:
         name: xrdp

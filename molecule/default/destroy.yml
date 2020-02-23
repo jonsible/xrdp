@@ -41,8 +41,6 @@
       retries: 300
       with_items: "{{ server.results }}"
 
-    # Mandatory configuration for Molecule to function.
-
     - name: Populate instance config
       set_fact:
         instance_conf: {}
@@ -51,4 +49,4 @@
       copy:
         content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
         dest: "{{ molecule_instance_config }}"
-      when: server.changed | bool
+      when: server.changed | bool  # noqa 503

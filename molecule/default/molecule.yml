@@ -13,11 +13,21 @@ platforms:
     machine_type: f1-micro
     image_family: ubuntu-1804-lts
     image_project: ubuntu-os-cloud
-  - name: gcp-arch-latest
+  - name: gcp-arch-linux
     zone: europe-west3-a
     machine_type: f1-micro
     image_family: arch
     image_project: arch-linux-gce
+  - name: gcp-centos-7
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: centos-7
+    image_project: centos-cloud
+  - name: gcp-debian-10
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: debian-10
+    image_project: debian-cloud
 provisioner:
   name: ansible
   log: true

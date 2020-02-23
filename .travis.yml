@@ -30,6 +30,7 @@ install:
   - pip install testinfra
   - pip install molecule
   - pip install molecule-gce
+  - pip install google-auth
   - WDIR=$(pwd)
   - cd /opt
   - curl -L https://networkgenomics.com/try/mitogen-0.2.9.tar.gz | tar -xz

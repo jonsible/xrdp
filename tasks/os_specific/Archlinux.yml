@@ -46,11 +46,13 @@
     state: present
 
 - name: Creating aur_builder
+  become: true
   user:
     name: aur_builder
     group: wheel
 
 - name: Giving passwordless access to pacman
+  become: true
   lineinfile:
     path: /etc/sudoers.d/11-install-aur_builder
     line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
@@ -80,19 +82,19 @@
   tags: molecule-notest
 
 - name: Allowing 3389/tcp
-  become: yes
+  become: true
   firewalld:
     port: 3389/tcp
-    permanent: yes
+    permanent: true
     state: enabled
   notify: firewalld_reload
   tags: molecule-notest
 
 - name: Allowing 3389/udp
-  become: yes
+  become: true
   firewalld:
     port: 3389/udp
-    permanent: yes
+    permanent: true
     state: enabled
   notify: firewalld_reload
   tags: molecule-notest

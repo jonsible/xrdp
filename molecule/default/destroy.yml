@@ -5,14 +5,29 @@
   gather_facts: false
   no_log: "{{ molecule_no_log }}"
   tasks:
-    - name: Destroy molecule instance(s)
-      gce:
-        instance_names: "{{ item.name }}"
-        state: absent
+    - name: Create molecule instance(s)
+      gcp_compute_instance:
+        name: "{{ item.name }}"
+        machine_type: "{{ item.machine_type }}"
         zone: "{{ item.zone }}"
-        service_account_email: "{{ lookup('env', 'GCE_SERVICE_ACCOUNT_EMAIL') }}"
-        credentials_file: "{{ lookup('env', 'GCE_CREDENTIALS_FILE') }}"
-        project_id: "{{ lookup('env', 'GCE_PROJECT_ID') }}"
+        disks:
+          - auto_delete: true
+            boot: true
+            initialize_params:
+              disk_size_gb: 10
+              source_image: projects/{{ item.image_project }}/global/images/family/{{ item.image_family }}
+        network_interfaces:
+          - network:
+              name: default
+            access_configs:
+              - name: 'External NAT'
+                nat_ip:
+                  name: '{{ item.name }}-ip'
+                type: 'ONE_TO_ONE_NAT'
+        project: "{{ lookup('env', 'GCE_PROJECT_ID') }}"
+        auth_kind: serviceaccount
+        service_account_file: "{{ lookup('env', 'GCE_CREDENTIALS_FILE') }}"
+        state: absent
       register: server
       with_items: "{{ molecule_yml.platforms }}"
       async: 7200

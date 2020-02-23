@@ -1,5 +1,24 @@
 ---
-- name: Converge
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Execute gcloud compute ssh
+      shell: gcloud compute ssh {{ item.name }} --zone={{ item.zone }} --command "exit"
+      changed_when: false
+      with_items: "{{ molecule_yml.platforms }}"
+
+- name: Prepare
+  hosts: all
+  strategy: linear
+  gather_facts: false
+  tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal python-zipstream)
+      become: true
+      changed_when: false
+
+- name: Prepare
   hosts: all
   tasks:
     - name: Installing EPEL

@@ -9,15 +9,28 @@
     ssh_user: "{{ lookup('env', 'USER') }}"
     ssh_identity_file: "{{ lookup('env', 'HOME') }}/.ssh/google_compute_engine"
   tasks:
-    - name: Create molecule instance(s)
-      gce:
-        instance_names: "{{ item.name }}"
-        zone: "{{ item.zone }}"
+    - name: Destroy molecule instance(s)
+      gcp_compute_instance:
+        name: "{{ item.name }}"
         machine_type: "{{ item.machine_type }}"
-        image: "{{ item.image }}"
-        service_account_email: "{{ lookup('env', 'GCE_SERVICE_ACCOUNT_EMAIL') }}"
-        credentials_file: "{{ lookup('env', 'GCE_CREDENTIALS_FILE') }}"
-        project_id: "{{ lookup('env', 'GCE_PROJECT_ID') }}"
+        zone: "{{ item.zone }}"
+        disks:
+          - auto_delete: true
+            boot: true
+            initialize_params:
+              disk_size_gb: 10
+              source_image: projects/{{ item.image_project }}/global/images/family/{{ item.image_family }}
+        network_interfaces:
+          - network:
+              name: default
+            access_configs:
+              - name: 'External NAT'
+                nat_ip:
+                  name: '{{ item.name }}-ip'
+                type: 'ONE_TO_ONE_NAT'
+        project: "{{ lookup('env', 'GCE_PROJECT_ID') }}"
+        auth_kind: serviceaccount
+        service_account_file: "{{ lookup('env', 'GCE_CREDENTIALS_FILE') }}"
       register: server
       with_items: "{{ molecule_yml.platforms }}"
       async: 7200
@@ -36,8 +49,8 @@
     - name: Populate instance config dict
       set_fact:
         instance_conf_dict: {
-          'instance': "{{ item.instance_data[0].name }}",
-          'address': "{{ item.instance_data[0].public_ip }}",
+          'instance': "{{ item.name }}",
+          'address': "{{ item.networkInterfaces[0].accessConfigs[0].natIP }}",
           'user': "{{ ssh_user }}",
           'port': "{{ ssh_port }}",
           'identity_file': "{{ ssh_identity_file }}", }

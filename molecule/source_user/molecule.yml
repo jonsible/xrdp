@@ -1,58 +1,47 @@
 ---
 dependency:
   name: galaxy
+  options:
+    role-file: ../default/requirements.yml
 driver:
-  name: docker
+  name: gce
 lint: |
   yamllint .
   ansible-lint
   flake8
 platforms:
-  - name: centos-7
-    image: jonsible/centos:7-build
-    capabilities:
-      - LINUX_IMMUTABLE
-    tty: true
-    env:
-      container: docker
-  - name: debian-stretch
-    image: jonsible/debian:buster-build
-    capabilities:
-      - LINUX_IMMUTABLE
-    tty: true
-    env:
-      container: docker
-      LC_ALL: en_US.utf8
-      DEBIAN_FRONTEND: noninteractive
-  - name: ubuntu-18.04
-    image: jonsible/ubuntu:18.04-systemd
-    tty: true
-    env:
-      container: docker
-      LC_ALL: en_US.utf8
-      DEBIAN_FRONTEND: noninteractive
-    privileged: true
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-    command: "/lib/systemd/systemd"
-    exposed_ports:
-      - 3389/udp
-      - 3389/tcp
-    published_ports:
-      - 0.0.0.0:28001:3389/udp
-      - 0.0.0.0:28001:3389/tcp
-  - name: archlinux-latest
-    image: jonsible/archlinux:latest-build
-    capabilities:
-      - LINUX_IMMUTABLE
-    env:
-      container: docker
+  - name: gcp-ubuntu-1804
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: ubuntu-1804-lts
+    image_project: ubuntu-os-cloud
+  - name: gcp-arch-linux
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: arch
+    image_project: arch-linux-gce
+  - name: gcp-centos-7
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: centos-7
+    image_project: centos-cloud
+  - name: gcp-debian-10
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: debian-10
+    image_project: debian-cloud
 provisioner:
   name: ansible
+  playbooks:
+    create: ../default/create.yml
+    destroy: ../default/destroy.yml
+    prepare: ../default/prepare.yml
+    converge: converge.yml
+  log: true
   env:
     # yamllint disable-line rule:line-length
     ANSIBLE_STRATEGY_PLUGINS: /opt/mitogen-0.2.9/ansible_mitogen/plugins/strategy
     ANSIBLE_STRATEGY: mitogen_linear
     ANSIBLE_PIPELINING: true
 verifier:
-  name: testinfra
+  name: ansible

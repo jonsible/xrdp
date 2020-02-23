@@ -9,11 +9,6 @@
     xrdp_skel_config: true
     xrdp_user_install: true
     xrdp_user_config: true
-  pre_tasks:
-    - name: Update cache
-      apt:
-        update_cache: true
-      when: ansible_os_family == "Debian"
   tasks:
     - name: Creating users
       become: true

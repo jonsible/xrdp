@@ -1,83 +1,47 @@
 ---
-  dependency:
-    name: galaxy
-  driver:
-    name: docker
-  lint: |
-    yamllint .
-    ansible-lint
-    flake8
-  platforms:
-    - name: centos-7
-      image: jonsible/centos:7-build
-      tty: true
-      env:
-        container: docker
-      privileged: true
-      volumes:
-        - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-      command: "/sbin/init"
-      exposed_ports:
-        - 3389/udp
-        - 3389/tcp
-      published_ports:
-        - 0.0.0.0:28000:3389/udp
-        - 0.0.0.0:28000:3389/tcp
-    - name: debian-stretch
-      image: jonsible/debian:buster-sbuild
-      tty: true
-      env:
-        container: docker
-        LC_ALL: en_US.utf8
-        DEBIAN_FRONTEND: noninteractive
-      privileged: true
-      volumes:
-        - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-      command: "/lib/systemd/systemd"
-      exposed_ports:
-        - 3389/udp
-        - 3389/tcp
-      published_ports:
-        - 0.0.0.0:28001:3389/udp
-        - 0.0.0.0:28001:3389/tcp
-    - name: ubuntu-18.04
-      image: jonsible/ubuntu:18.04-sbuild
-      tty: true
-      env:
-        container: docker
-        LC_ALL: en_US.utf8
-        DEBIAN_FRONTEND: noninteractive
-      privileged: true
-      volumes:
-        - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-      command: "/lib/systemd/systemd"
-      exposed_ports:
-        - 3389/udp
-        - 3389/tcp
-      published_ports:
-        - 0.0.0.0:28002:3389/udp
-        - 0.0.0.0:28002:3389/tcp
-    - name: archlinux-latest
-      image: jonsible/archlinux:latest-build
-      env:
-        container: docker
-      privileged: true
-      volumes:
-        - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-      command: "/usr/lib/systemd/systemd"
-      exposed_ports:
-        - 3389/udp
-        - 3389/tcp
-      published_ports:
-        - 0.0.0.0:28003:3389/udp
-        - 0.0.0.0:28003:3389/tcp
-  provisioner:
-    name: ansible
-    env:
-      # yamllint disable-line rule:line-length
-      ANSIBLE_STRATEGY_PLUGINS: /opt/mitogen-0.2.9/ansible_mitogen/plugins/strategy
-      ANSIBLE_STRATEGY: mitogen_linear
-      ANSIBLE_PIPELINING: true
-  verifier:
-    name: testinfra
-  
+dependency:
+  name: galaxy
+  options:
+    role-file: ../default/requirements.yml
+driver:
+  name: gce
+lint: |
+  yamllint .
+  ansible-lint
+  flake8
+platforms:
+  - name: gcp-ubuntu-1804
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: ubuntu-1804-lts
+    image_project: ubuntu-os-cloud
+  - name: gcp-arch-linux
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: arch
+    image_project: arch-linux-gce
+  - name: gcp-centos-7
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: centos-7
+    image_project: centos-cloud
+  - name: gcp-debian-10
+    zone: europe-west3-a
+    machine_type: f1-micro
+    image_family: debian-10
+    image_project: debian-cloud
+provisioner:
+  name: ansible
+  playbooks:
+    create: ../default/create.yml
+    destroy: ../default/destroy.yml
+    prepare: ../default/prepare.yml
+    converge: converge.yml
+  log: true
+  env:
+    # yamllint disable-line rule:line-length
+    ANSIBLE_STRATEGY_PLUGINS: /opt/mitogen-0.2.9/ansible_mitogen/plugins/strategy
+    ANSIBLE_STRATEGY: mitogen_linear
+    ANSIBLE_PIPELINING: true
+verifier:
+  name: ansible

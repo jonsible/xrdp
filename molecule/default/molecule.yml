@@ -30,7 +30,6 @@ platforms:
     image_project: debian-cloud
 provisioner:
   name: ansible
-  log: true
   env:
     # yamllint disable-line rule:line-length
     ANSIBLE_STRATEGY_PLUGINS: /opt/mitogen-0.2.9/ansible_mitogen/plugins/strategy

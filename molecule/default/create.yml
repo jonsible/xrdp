@@ -9,7 +9,7 @@
     ssh_user: "{{ lookup('env', 'USER') }}"
     ssh_identity_file: "{{ lookup('env', 'HOME') }}/.ssh/google_compute_engine"
   tasks:
-    - name: Destroy molecule instance(s)
+    - name: Create molecule instance(s)
       gcp_compute_instance:
         name: "{{ item.name }}"
         machine_type: "{{ item.machine_type }}"

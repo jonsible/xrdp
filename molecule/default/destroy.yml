@@ -5,7 +5,7 @@
   gather_facts: false
   no_log: "{{ molecule_no_log }}"
   tasks:
-    - name: Create molecule instance(s)
+    - name: Destroy molecule instance(s)
       gcp_compute_instance:
         name: "{{ item.name }}"
         machine_type: "{{ item.machine_type }}"

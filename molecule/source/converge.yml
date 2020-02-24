@@ -10,12 +10,12 @@
     - include_role:
         name: xrdp
 
-    # - include_role:
-    #     name: xrdp
-    #     apply:
-    #       tags:
-    #         - molecule-idempotence-notest
-    #   vars:
-    #     xrdp_force_install: true
-    #   tags:
-    #     - molecule-idempotence-notest
+    - include_role:
+        name: xrdp
+        apply:
+          tags:
+            - molecule-idempotence-notest
+      vars:
+        xrdp_force_install: true
+      tags:
+        - molecule-idempotence-notest

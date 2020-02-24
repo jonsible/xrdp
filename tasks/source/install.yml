@@ -47,9 +47,11 @@
 - name: Fix PIDFile
   become: true
   lineinfile:
-    path: "{{ systemd_units }}/{{ item }}.service"
-    regex: "^PIDFile=/var/run/{{ item }}.pid$"
-    line: "^PIDFile=/run/{{ item }}.pid"
+    path: "{{ systemd_units }}/{{ service_name }}.service"
+    regex: "^PIDFile=/var/run/{{ service_name }}.pid$"
+    line: "^PIDFile=/run/{{ service_name }}.pid"
   loop:
     - xrdp
     - xrdp-sesman
+  loop_control:
+    loop_var: service_name

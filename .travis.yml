@@ -37,7 +37,7 @@ install:
   - cd $WDIR
 
 script:
-  - molecule test
+  - molecule test --all
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

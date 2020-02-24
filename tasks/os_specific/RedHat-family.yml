@@ -18,10 +18,36 @@
     name: "{{ item }}"
     state: present
   loop:
-    - ncurses-devel
-    - libevent
-    - libevent-devel
+    - finger
+    - cmake
+    - patch
+    - gcc
+    - make
+    - autoconf
+    - libtool
+    - automake
     - pkgconfig
+    - openssl-devel
+    - gettext
+    - file
+    - pam-devel
+    - libX11-devel
+    - libXfixes-devel
+    - libjpeg-devel
+    - flex
+    - bison
+    - gcc-c++
+    - libxslt
+    - perl-libxml-perl
+    - xorg-x11-font-utils
+    - xmlto-tex
+    - libXrandr-devel
+    - nasm
+    - xorg-x11-server-devel
+    - xorg-x11-server-Xorg
+    - xorg-x11-xinit
+    - libXfont2
+    - libXfont2-devel
   when: xrdp_install_from_source|bool
 
 - name: Installing firewalld

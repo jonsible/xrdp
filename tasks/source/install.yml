@@ -18,7 +18,18 @@
 - name: Configuring xrdp
   become: true
   shell: |
-    ./configure --prefix="{{ prefix }}"
+    ./boostrap
+    ./configure --prefix="{{ prefix }}" \
+    --with-systemdsystemunitdir=/usr/lib/systemd/system \
+    --enable-jpeg \
+    --enable-tjpeg \
+    --enable-fuse \
+    --enable-opus \
+    --enable-rfxcodec \
+    --enable-mp3lame \
+    --enable-pixman \
+    --enable-painter \
+    --enable-vsock \
   changed_when: false
   args:
     chdir: "{{ source_path }}/xrdp-{{ xrdp_git_version }}/"

@@ -18,10 +18,25 @@
     name: "{{ item }}"
     state: present
   loop:
-    - autoconf
-    - libncurses-dev
-    - libevent-dev
+    - git
+    - intltool
+    - libfuse-dev
+    - libjpeg-dev
+    - libmp3lame-dev
+    - libpam0g-dev
+    - libpixman-1-dev
+    - libssl-dev
+    - libx11-dev
+    - libxfixes-dev
+    - libxml2-dev
+    - libxrandr-dev
+    - nasm
     - pkg-config
+    - python-libxml2
+    - xserver-xorg-dev
+    - xsltproc
+    - xutils
+    - xutils-dev
   when: xrdp_install_from_source|bool
 
 - name: Installing ufw

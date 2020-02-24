@@ -5,7 +5,13 @@
     update_cache: true
   tags: molecule-idempotence-notest
 
-- name: Installing additionnal build tools
+- name: Installing build tools
+  become: true
+  pacman:
+    name: "{{ build_tools }}"
+    state: present
+
+- name: Installing additionnal dependencies
   become: true
   pacman:
     name: "{{ item }}"
@@ -26,22 +32,6 @@
     - xorg-fonts
     - xorg-server
     - xorg-xinit
-  when: xrdp_install_from_source|bool
-
-- name: Installing build tools
-  become: true
-  pacman:
-    name: "{{ build_tools }}"
-    state: present
-
-- name: Installing additionnal dependencies
-  become: true
-  pacman:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - ncurses
-    - libevent
   when: xrdp_install_from_source|bool
 
 - name: Installing git

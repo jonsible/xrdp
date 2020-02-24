@@ -11,23 +11,23 @@ lint: |
   flake8
 platforms:
   - name: gcp-ubuntu-1804
-    zone: europe-west3-a
-    machine_type: f1-micro
+    zone: us-central1-c
+    machine_type: n1-standard-2
     image_family: ubuntu-1804-lts
     image_project: ubuntu-os-cloud
   - name: gcp-arch-linux
-    zone: europe-west3-a
-    machine_type: f1-micro
+    zone: us-central1-c
+    machine_type: n1-standard-2
     image_family: arch
     image_project: arch-linux-gce
   - name: gcp-centos-7
-    zone: europe-west3-a
-    machine_type: f1-micro
+    zone: us-central1-c
+    machine_type: n1-standard-2
     image_family: centos-7
     image_project: centos-cloud
   - name: gcp-debian-10
-    zone: europe-west3-a
-    machine_type: f1-micro
+    zone: us-central1-c
+    machine_type: n1-standard-2
     image_family: debian-10
     image_project: debian-cloud
 provisioner:
@@ -43,5 +43,6 @@ provisioner:
     ANSIBLE_STRATEGY_PLUGINS: /opt/mitogen-0.2.9/ansible_mitogen/plugins/strategy
     ANSIBLE_STRATEGY: mitogen_linear
     ANSIBLE_PIPELINING: true
+    ANSIBLE_STDOUT_CALLBACK: yaml
 verifier:
   name: ansible

@@ -28,6 +28,8 @@
                 nat_ip:
                   name: '{{ item.name }}-ip'
                 type: 'ONE_TO_ONE_NAT'
+        scheduling:
+          preemptible: true
         project: "{{ lookup('env', 'GCE_PROJECT_ID') }}"
         auth_kind: serviceaccount
         service_account_file: "{{ lookup('env', 'GCE_CREDENTIALS_FILE') }}"

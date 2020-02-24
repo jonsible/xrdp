@@ -15,17 +15,3 @@
     use: yay
     skip_installed: true
   when: ansible_distribution == "Archlinux"
-
-- name: Start and enable xrdp-sesman
-  become: true
-  service:
-    name: xrdp-sesman
-    enabled: true
-    state: started
-
-- name: Start and enable xrdp
-  become: true
-  service:
-    name: xrdp
-    enabled: true
-    state: started

@@ -1,2 +1,3 @@
 ---
 build_tools: "build-essential"
+systemd_units: /lib/systemd/system

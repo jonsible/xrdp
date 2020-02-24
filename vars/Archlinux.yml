@@ -1,0 +1,3 @@
+---
+build_tools: "base-devel"
+systemd_units: /usr/lib/systemd/system

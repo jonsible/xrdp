@@ -23,9 +23,12 @@
     - libfuse-dev
     - libjpeg-dev
     - libmp3lame-dev
+    - libopus-dev
     - libpam0g-dev
     - libpixman-1-dev
     - libssl-dev
+    - libtool
+    - libturbojpeg0-dev
     - libx11-dev
     - libxfixes-dev
     - libxml2-dev

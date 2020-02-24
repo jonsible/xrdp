@@ -16,6 +16,10 @@
 - include_tasks: repo.yml
   when: not xrdp_install_from_source|bool
 
+- name: Disabling user install
+  set_fact:
+    xrdp_user_install: false
+
 - include_tasks: set_user_list.yml
   when: >
     xrdp_user_config|bool or
@@ -40,3 +44,17 @@
   include_tasks: source.yml
   loop: "{{ lookup('dict', xrdp_user_list, wantlist=true) }}"
   when: xrdp_install_from_source|bool
+
+- name: Start and enable xrdp-sesman
+  become: true
+  service:
+    name: xrdp-sesman
+    enabled: true
+    state: started
+
+- name: Start and enable xrdp
+  become: true
+  service:
+    name: xrdp
+    enabled: true
+    state: started

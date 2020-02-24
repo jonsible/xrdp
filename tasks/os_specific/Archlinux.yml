@@ -18,6 +18,7 @@
     state: present
   loop:
     - cmake
+    - fuse2
     - libjpeg-turbo
     - libx11
     - libxfont2
@@ -25,13 +26,16 @@
     - libxslt
     - libxrandr
     - nasm
+    - lame
     - openssl
+    - opus
     - pam
     - perl-xml-libxml
     - xmlto
     - xorg-fonts
     - xorg-server
     - xorg-xinit
+    - libjpeg-turbo
   when: xrdp_install_from_source|bool
 
 - name: Installing git
@@ -74,22 +78,15 @@
     name: firewalld
     enabled: true
     state: started
-  tags: molecule-notest
 
-- name: Allowing 3389/tcp
+- name: Allow SSH and RDP
   become: true
   firewalld:
-    port: 3389/tcp
+    port: "{{ item[0] }}/{{ item[1] }}"
     permanent: true
     state: enabled
   notify: firewalld_reload
-  tags: molecule-notest
-
-- name: Allowing 3389/udp
-  become: true
-  firewalld:
-    port: 3389/udp
-    permanent: true
-    state: enabled
-  notify: firewalld_reload
-  tags: molecule-notest
+  loop:
+    - [ 22, 'tcp' ]
+    - [ 3389, 'tcp']
+    - [ 3389, 'udp']

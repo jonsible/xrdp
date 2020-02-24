@@ -15,21 +15,21 @@ platforms:
     machine_type: n1-standard-2
     image_family: ubuntu-1804-lts
     image_project: ubuntu-os-cloud
-  - name: gcp-arch-linux
-    zone: us-central1-c
-    machine_type: n1-standard-2
-    image_family: arch
-    image_project: arch-linux-gce
-  - name: gcp-centos-7
-    zone: us-central1-c
-    machine_type: n1-standard-2
-    image_family: centos-7
-    image_project: centos-cloud
-  - name: gcp-debian-10
-    zone: us-central1-c
-    machine_type: n1-standard-2
-    image_family: debian-10
-    image_project: debian-cloud
+  # - name: gcp-arch-linux
+  #   zone: us-central1-c
+  #   machine_type: n1-standard-2
+  #   image_family: arch
+  #   image_project: arch-linux-gce
+  # - name: gcp-centos-7
+  #   zone: us-central1-c
+  #   machine_type: n1-standard-2
+  #   image_family: centos-7
+  #   image_project: centos-cloud
+  # - name: gcp-debian-10
+  #   zone: us-central1-c
+  #   machine_type: n1-standard-2
+  #   image_family: debian-10
+  #   image_project: debian-cloud
 provisioner:
   name: ansible
   playbooks:
@@ -38,10 +38,12 @@ provisioner:
     prepare: ../default/prepare.yml
     converge: converge.yml
   log: true
+  options:
+    vvv: true
   env:
     # yamllint disable-line rule:line-length
     ANSIBLE_STRATEGY_PLUGINS: /opt/mitogen-0.2.9/ansible_mitogen/plugins/strategy
-    ANSIBLE_STRATEGY: mitogen_linear
+    # ANSIBLE_STRATEGY: mitogen_linear
     ANSIBLE_PIPELINING: true
     ANSIBLE_STDOUT_CALLBACK: yaml
 verifier:

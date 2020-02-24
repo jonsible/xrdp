@@ -1,4 +1,18 @@
 ---
 - name: firewalld_reload
-  become: yes
+  become: true
   command: firewall-cmd --reload
+
+- name: xrdp-restart
+  become: true
+  systemd:
+    name: xrdp
+    state: restarted
+    daemon_reload: true
+
+- name: xrdp-sesman-restart
+  become: true
+  systemd:
+    name: xrdp-sesman
+    state: restarted
+    daemon_reload: true

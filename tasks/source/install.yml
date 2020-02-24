@@ -34,6 +34,7 @@
   become: true
   make:
     chdir: "{{ source_path }}/xrdp-{{ xrdp_git_version }}"
+  changed_when: false
 
 - name: Installing xrdp
   become: true
@@ -46,12 +47,16 @@
 
 - name: Fix PIDFile
   become: true
-  lineinfile:
-    path: "{{ systemd_units }}/{{ service_name }}.service"
-    regex: "^PIDFile=/var/run/{{ service_name }}.pid$"
-    line: "^PIDFile=/run/{{ service_name }}.pid"
+  copy: 
+    content: |
+      [Service]
+      PIDFile=/run/{{ service_name }}.pid
+    dest: /etc/systemd/system/{{ service_name }}.service
   loop:
     - xrdp
     - xrdp-sesman
   loop_control:
     loop_var: service_name
+  notify:
+    - xrdp-restart
+    - xrdp-sesman-restart

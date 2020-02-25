@@ -25,7 +25,9 @@
     --enable-rfxcodec \
     --enable-mp3lame \
     --enable-pixman \
-    --enable-vsock
+    --enable-vsock \
+    --enable-kerberos \
+    --enable-ipv6
   changed_when: false
   args:
     chdir: "{{ source_path }}/xrdp-{{ xrdp_git_version }}/"
@@ -45,13 +47,25 @@
     params:
       PREFIX: "{{ prefix }}"
 
+- name: Creating modular systemd
+  become: true
+  file:
+    path: /etc/systemd/system/{{ service_name }}.service.d/
+    state: directory
+  loop:
+    - xrdp
+    - xrdp-sesman
+  loop_control:
+    loop_var: service_name
+
 - name: Fix PIDFile
   become: true
   copy: 
     content: |
       [Service]
+      PIDFile=
       PIDFile=/run/{{ service_name }}.pid
-    dest: /etc/systemd/system/{{ service_name }}.service
+    dest: /etc/systemd/system/{{ service_name }}.service.d/override.conf
   loop:
     - xrdp
     - xrdp-sesman

@@ -29,6 +29,7 @@
     - gcc
     - gcc-c++
     - gettext
+    - krb5-devel
     - lame-devel
     - libX11-devel
     - libXfixes-devel

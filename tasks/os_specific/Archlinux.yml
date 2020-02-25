@@ -19,6 +19,7 @@
   loop:
     - cmake
     - fuse2
+    - krb5
     - libjpeg-turbo
     - libx11
     - libxfont2

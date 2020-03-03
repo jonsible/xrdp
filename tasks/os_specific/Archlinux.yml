@@ -39,12 +39,6 @@
     - libjpeg-turbo
   when: xrdp_install_from_source|bool
 
-- name: Installing git
-  become: true
-  pacman:
-    name: git
-    state: present
-
 - name: Creating aur_builder
   become: true
   user:

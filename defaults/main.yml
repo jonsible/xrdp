@@ -15,7 +15,7 @@ xrdp_version: "0.9.12"
 # Shouldn't be changed
 xrdp_bin_name: "xrdp"
 xrdp_user_list: "{{ global_user_list | default({}) }}"
-xrdp_git_version_cmd: git ls-remote --tags https://github.com/neutrinolabs/xrdp.git | sed 's/.*\///' | egrep -o "^v([0-9.]+)$" | sed 's/v//' | sort -V | tail -n1
+xrdp_git_version_cmd: git ls-remote --tags https://github.com/neutrinolabs/xorgxrdp.git | sed 's/.*\///' | egrep -o "^v([0-9.]+)$" | sed 's/v//' | sort -V | tail -n1
 xrdp_local_version_cmd: |
   {{ prefix }}/bin/{{ xrdp_bin_name }} -v | egrep -o "([0-9]+\.)+([0-9]+)$"
 

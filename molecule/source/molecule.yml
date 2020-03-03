@@ -32,6 +32,7 @@ platforms:
     image_project: debian-cloud
 provisioner:
   name: ansible
+  log: true
   playbooks:
     create: ../default/create.yml
     destroy: ../default/destroy.yml

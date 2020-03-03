@@ -1,4 +1,10 @@
 ---
+- name: Installing git
+  become: true
+  package:
+    name: git
+    state: present
+
 - name: Getting latest xrdp version
   shell: | # noqa 303
     set -o pipefail

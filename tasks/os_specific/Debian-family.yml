@@ -18,7 +18,6 @@
     name: "{{ item }}"
     state: present
   loop:
-    - git
     - intltool
     - libfuse-dev
     - libjpeg-dev

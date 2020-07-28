@@ -1,8 +1,9 @@
 ---
 - name: Converge
   hosts: all
-  vars:
-    xrdp_skel_config: true
   tasks:
+    - include_role:
+        name: jonsible.filter_plugins
+
     - include_role:
         name: xrdp

@@ -1,21 +1,10 @@
 ---
 - name: Converge
   hosts: all
-  vars:
-    xrdp_install_from_source: true
-    xrdp_prefix: "/usr/local"
-    xrdp_source_path: "/test/source"
-    xrdp_skel_config: true
   tasks:
-    - include_role:
-        name: xrdp
+    - include_role: 
+        name: jonsible.yay
+      when: ansible_os_family == "Archlinux"
 
     - include_role:
         name: xrdp
-        apply:
-          tags:
-            - molecule-idempotence-notest
-      vars:
-        xrdp_force_install: true
-      tags:
-        - molecule-idempotence-notest

@@ -1,3 +1,0 @@
----
-build_tools: "@Development Tools"
-systemd_units: /usr/lib/systemd/system

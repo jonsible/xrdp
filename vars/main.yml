@@ -1,0 +1,108 @@
+---
+_name: xrdp
+
+dependencies:
+  run:
+    all:
+      - nasm
+    Archlinux:
+      - base-devel
+      - cmake
+      - fuse2
+      - krb5
+      - libjpeg-turbo
+      - libx11
+      - libxfont2
+      - libxfixes
+      - libxslt
+      - libxrandr
+      - lame
+      - openssl
+      - opus
+      - pam
+      - perl-xml-libxml
+      - xmlto
+      - xorg-fonts
+      - xorg-server
+      - xorg-xinit
+    Debian-family:
+      - build-essential
+      - intltool
+      - libfuse-dev
+      - libjpeg-dev
+      - libkrb5-dev
+      - libmp3lame-dev
+      - libopus-dev
+      - libpam0g-dev
+      - libpixman-1-dev
+      - libssl-dev
+      - libtool
+      - libturbojpeg0-dev
+      - libx11-dev
+      - libxfixes-dev
+      - libxml2-dev
+      - libxrandr-dev
+      - pkg-config
+      - python-libxml2
+      - xserver-xorg-dev
+      - xsltproc
+      - xutils
+      - xutils-dev
+    RedHat-family:
+      - "@Development Tools"
+      - cmake
+      - file
+      - finger
+      - fuse-devel
+      - krb5-devel
+      - lame-devel
+      - libX11-devel
+      - libXfixes-devel
+      - libXfont2
+      - libXfont2-devel
+      - libXrandr-devel
+      - libjpeg-devel
+      - libxslt
+      - openssl-devel
+      - opus-devel
+      - pam-devel
+      - perl-libxml-perl
+      - turbojpeg-devel
+      - xmlto-tex
+      - xorg-x11-font-utils
+      - xorg-x11-server-Xorg
+      - xorg-x11-server-devel
+      - xorg-x11-xinit
+  build:
+
+clone:
+  repo: https://github.com/neutrinolabs/xrdp.git
+
+prepare:
+  shell: |
+    ./bootstrap
+
+build:
+  shell: |
+    ./configure --prefix="{{ prefix }}" \
+    --enable-jpeg \
+    --enable-tjpeg \
+    --enable-fuse \
+    --enable-opus \
+    --enable-rfxcodec \
+    --enable-mp3lame \
+    --enable-pixman \
+    --enable-vsock \
+    --enable-kerberos \
+    --enable-ipv6 \
+    && make -j4
+
+install:
+  shell: |
+    make install
+  creates: "{{ prefix }}/sbin/{{ _name }}"
+
+uninstall:
+  shell: |
+    make uninstall
+  removes: "{{ prefix }}/sbin/{{ _name }}"

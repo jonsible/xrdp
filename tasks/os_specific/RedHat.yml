@@ -1,4 +1,0 @@
----
-- name: Enabling rhel-server-rhscl-7-rpms
-  rhsm_repository:
-      name: rhel-server-rhscl-7-rpms

@@ -1,60 +1,53 @@
-# yamllint disable rule:line-length
 ---
-
-- name: Include OS-specific variables.
-  include_vars: "{{ ansible_os_family }}-family.yml"
-
-- name: Include Distribution version specific variables
-  include_vars: "{{ ansible_distribution }}.yml"
-
-- name: Include tasks
-  include_tasks: "os_specific/{{ ansible_distribution }}.yml"
-
-- name: Include tasks
-  include_tasks: "os_specific/{{ ansible_os_family }}-family.yml"
-
-- include_tasks: repo.yml
-  when: not xrdp_install_from_source|bool
-
-- name: Disabling user install
-  set_fact:
-    xrdp_user_install: false
-
-- include_tasks: set_user_list.yml
-  when: >
-    xrdp_user_config|bool or
-    xrdp_user_install|bool
-
-- name: Installing config
-  include_tasks: config.yml
-
-- name: Setting user_list (global)
-  set_fact:
-    xrdp_user_list:
-      root:
-        home: "{{ xrdp_prefix }}"
-        gid: 1000
-        uid: 1000
-        shell: /bin/bash
-  when:
-    - not xrdp_user_install|bool
-    - xrdp_install_from_source|bool
-
-- name: Install from source
-  include_tasks: source.yml
-  loop: "{{ lookup('dict', xrdp_user_list, wantlist=true) }}"
-  when: xrdp_install_from_source|bool
-
-- name: Start and enable xrdp-sesman
+- name: Installing xrdp (Package, not arch)
   become: true
-  service:
-    name: xrdp-sesman
-    enabled: true
-    state: started
-
-- name: Start and enable xrdp
-  become: true
-  service:
+  package:
     name: xrdp
+  when: 
+    - xrdp.package
+    - ansible_os_family != "Archlinux"
+
+- name: Installing xrdp (Package, arch)
+  become: true
+  become_user: "{{ aur_user }}"
+  aur:
+    name: xrdp
+    skip_installed: true
+  when:
+    - xrdp.package
+    - (xrdp.package) != (xrdp.source is defined)
+    - ansible_os_family == "Archlinux"
+
+- name: Installing xrdp (Source)
+  include_role:
+    name: jonsible.builder
+    tasks_from: builder.yml
+  vars:
+    prefix: "{{ item.prefix }}"
+    version: "{{ item.version }}"
+    owner: "{{ item.owner }}"
+  loop: "{{ xrdp.source.contexts }}"
+  when: xrdp.source is defined
+
+- name: Starting and enabling services
+  become: true
+  systemd:
+    name: "{{ item }}"
+    enabled: true
+    daemon_reload: true
+    state: started
+  loop:
+    - xrdp
+    - xrdp-sesman
+  when: ansible_service_mgr == "systemd"
+
+- name: Starting and enabling services
+  become: true
+  service:
+    name: "{{ item }}"
     enabled: true
     state: started
+  loop:
+    - xrdp
+    - xrdp-sesman
+  when: ansible_service_mgr != "systemd"

@@ -26,5 +26,10 @@ galaxy_info:
   galaxy_tags: []
 
   dependencies:
-    - role: jonsible.ulist
     - role: jonsible.filter_plugins
+
+    - role: jonsible.yay
+      when: ansible_os_family == "Archlinux"
+
+    - role: jonsible.builder
+      when: xrdp.source is defined

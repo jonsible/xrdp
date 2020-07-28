@@ -17,6 +17,10 @@ To install on Arch distributions, you need to install the ansible-aur module on 
 git clone https://github.com/kewlfft/ansible-aur.git ~/.ansible/plugins/modules/aur
 ```
 
+**⚠ WARNING ⚠**  
+Firewall configuration is not managed by this role.  
+You should manage it manually in your playbook.  
+
 ## Role Variables
 
 ### Default usage
@@ -28,16 +32,7 @@ If you want to adapt this to your needs look at the [Advanced usage](#advanced-u
 
 For more advanced usage the following variables are available:
 ```yaml
-xrdp_source_path: "{{ global_source_path | default('/opt') }}"
-xrdp_prefix: "{{ global_prefix | default('/usr/local') }}"
-xrdp_user_install: "{{ global_user_install | default(false) }}"
-xrdp_user_config: "{{_global_user_config | default(false) }}"
-xrdp_skel_config: "{{ global_skel_config | default(false) }}"
-xrdp_install_from_source: "{{ global_install_from_source | default(false) }}"
-xrdp_force_install: "{{ global_force_install | default(false) }}"
-xrdp_user_strip: "{{ global_user_strip | default([]) }}"
-xrdp_user_filter: "{{ global_user_filter | default([])}}"
-xrdp_version: "2.9"
+
 ```
 
 ## Dependencies

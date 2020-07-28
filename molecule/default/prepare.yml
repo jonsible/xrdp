@@ -26,3 +26,8 @@
         name: epel-release
         state: present
       when: ansible_os_family == "RedHat"
+
+    - name: Installing yay
+      include_role: 
+        name: jonsible.yay
+      when: ansible_os_family == "Archlinux"
